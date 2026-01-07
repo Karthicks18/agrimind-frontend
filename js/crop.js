@@ -1,8 +1,7 @@
 console.log("✅ crop.js loaded");
 
 window.recommendCrop = async function () {
-
-    const district = document.getElementById("district").value;
+    const district = document.getElementById("district").value.trim();
     const N = document.getElementById("nitrogen").value;
     const P = document.getElementById("phosphorus").value;
     const K = document.getElementById("potassium").value;
@@ -24,25 +23,24 @@ window.recommendCrop = async function () {
         const response = await fetch(url);
         const data = await response.json();
 
-        // 🔍 DEBUG — THIS IS THE KEY
-        console.log("🌾 Crop API response:", data);
+        console.log("API RESPONSE:", data);
 
-        if (!data || data.success !== true) {
-            resultBox.innerHTML = "❌ Invalid response from server";
+        if (!data.success) {
+            resultBox.innerHTML = "❌ " + (data.error || "Unknown error");
             return;
         }
 
-        const crops = Array.isArray(data.local_crops)
-            ? data.local_crops.join(", ")
-            : "No crop data available";
+        const cropsText =
+            data.local_crops && data.local_crops.length > 0
+                ? data.local_crops.join(", ")
+                : "No local crop data available";
 
         resultBox.innerHTML = `
-            ✅ <b>District:</b> ${data.district}<br>
-            🌱 <b>Recommended Crops:</b> ${crops}
+            <b>${data.message}</b><br><br>
+            🌱 <b>Local crops:</b> ${cropsText}
         `;
-
     } catch (err) {
-        console.error("❌ Fetch error:", err);
+        console.error(err);
         resultBox.innerHTML = "❌ Backend not reachable.";
     }
 };
