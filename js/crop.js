@@ -10,40 +10,53 @@ window.recommendCrop = async function () {
 
     const resultBox = document.getElementById("result");
 
+    // Clear previous result
+    resultBox.innerHTML = "";
+
     if (!district || !N || !P || !K || !ph) {
         resultBox.innerHTML = "❌ Please fill all fields.";
         return;
     }
 
-    const url =
-        `https://agrimind-oxrb.onrender.com/recommend_crop` +
+    const apiUrl =
+        "https://agrimind-oxrb.onrender.com/recommend_crop" +
         `?district=${encodeURIComponent(district)}` +
-        `&N=${N}&P=${P}&K=${K}&ph=${ph}`;
+        `&N=${Number(N)}` +
+        `&P=${Number(P)}` +
+        `&K=${Number(K)}` +
+        `&ph=${Number(ph)}`;
+
+    console.log("Calling API:", apiUrl);
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await fetch(apiUrl);
 
+        if (!response.ok) {
+            throw new Error("API HTTP error");
+        }
+
+        const data = await response.json();
         console.log("API RESPONSE:", data);
 
         if (!data.success) {
-            resultBox.innerHTML = "❌ " + (data.error || "Something went wrong");
+            resultBox.innerHTML = "❌ " + (data.error || "Prediction failed");
             return;
         }
 
-        // ✅ SAFE handling
-        let localCropsText = "Not available for this district";
-        if (Array.isArray(data.local_crops) && data.local_crops.length > 0) {
-            localCropsText = data.local_crops.join(", ");
-        }
+        const crops =
+            Array.isArray(data.local_crops) && data.local_crops.length > 0
+                ? data.local_crops.join(", ")
+                : "No district-wise crop data available";
 
         resultBox.innerHTML = `
-            <b>${data.message.replaceAll("\n", "<br>")}</b><br><br>
-            🌱 <b>District-wise crops:</b> ${localCropsText}
+            <div style="color:#4ade80;">
+                <b>${data.message.replace(/\n/g, "<br>")}</b><br><br>
+                🌱 <b>Local crops:</b> ${crops}
+            </div>
         `;
 
     } catch (error) {
-        console.error(error);
-        resultBox.innerHTML = "❌ Backend not reachable.";
+        console.error("Fetch error:", error);
+        resultBox.innerHTML = "❌ Unable to connect to server.";
     }
 };
