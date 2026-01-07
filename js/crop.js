@@ -1,23 +1,20 @@
 console.log("✅ crop.js loaded");
 
-/* Attach function globally */
 window.recommendCrop = async function () {
 
-    const district = document.getElementById("district")?.value?.trim();
-    const N = document.getElementById("nitrogen")?.value;
-    const P = document.getElementById("phosphorus")?.value;
-    const K = document.getElementById("potassium")?.value;
-    const ph = document.getElementById("ph")?.value;
+    const district = document.getElementById("district").value.trim();
+    const N = document.getElementById("nitrogen").value;
+    const P = document.getElementById("phosphorus").value;
+    const K = document.getElementById("potassium").value;
+    const ph = document.getElementById("ph").value;
 
     const resultBox = document.getElementById("result");
 
-    // Safety check
     if (!district || !N || !P || !K || !ph) {
         resultBox.innerHTML = "❌ Please fill all fields.";
         return;
     }
 
-    // ✅ CORRECT BACKEND ENDPOINT
     const url =
         `https://agrimind-oxrb.onrender.com/recommend_crop` +
         `?district=${encodeURIComponent(district)}` +
@@ -27,26 +24,26 @@ window.recommendCrop = async function () {
         const response = await fetch(url);
         const data = await response.json();
 
-        console.log("✅ API RESPONSE:", data); // debug
+        console.log("API RESPONSE:", data);
 
-        if (!data || data.success !== true) {
-            resultBox.innerHTML = "❌ Failed to get crop recommendation.";
+        if (!data.success) {
+            resultBox.innerHTML = "❌ " + (data.error || "Something went wrong");
             return;
         }
 
-        // ✅ SAFE handling for empty / missing array
-        let cropsText = "No district-wise crop data available";
+        // ✅ SAFE handling
+        let localCropsText = "Not available for this district";
         if (Array.isArray(data.local_crops) && data.local_crops.length > 0) {
-            cropsText = data.local_crops.join(", ");
+            localCropsText = data.local_crops.join(", ");
         }
 
         resultBox.innerHTML = `
-            <b>${data.message}</b><br><br>
-            🌱 <b>Local crops:</b> ${cropsText}
+            <b>${data.message.replaceAll("\n", "<br>")}</b><br><br>
+            🌱 <b>District-wise crops:</b> ${localCropsText}
         `;
 
-    } catch (err) {
-        console.error("❌ Fetch error:", err);
+    } catch (error) {
+        console.error(error);
         resultBox.innerHTML = "❌ Backend not reachable.";
     }
 };
