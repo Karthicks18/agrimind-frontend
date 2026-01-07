@@ -1,4 +1,4 @@
-const API_BASE = "https://agrimind-oxrb.onrender.com";
+console.log("✅ crop.js loaded");
 
 window.recommendCrop = async function () {
     const district = document.getElementById("district").value;
@@ -9,23 +9,31 @@ window.recommendCrop = async function () {
 
     const resultBox = document.getElementById("result");
 
-    const url = `${API_BASE}/recommend_crop?district=${district}&N=${N}&P=${P}&K=${K}&ph=${ph}`;
+    if (!district || !N || !P || !K || !ph) {
+        resultBox.innerHTML = "❌ Please fill all fields.";
+        return;
+    }
+
+    const url = `https://agrimind-oxrb.onrender.com/recommend_crop` +
+        `?district=${district}&N=${N}&P=${P}&K=${K}&ph=${ph}`;
 
     try {
-        const res = await fetch(url);
-        const data = await res.json();
+        const response = await fetch(url);
+        const data = await response.json();
 
         if (!data.success) {
-    resultBox.innerHTML = "❌ " + data.error;
-    return;
-}
+            resultBox.innerHTML = "❌ " + data.error;
+            return;
+        }
 
-resultBox.innerHTML = `
-    ✅ <b>${data.message}</b><br>
-    🌱 Suitable crops: ${data.local_crops.join(", ")}
-`;
-
-    } catch (e) {
-        resultBox.innerHTML = "❌ Server not reachable.";
+        // ✅ USE CORRECT BACKEND KEYS
+        resultBox.innerHTML = `
+            ✅ <b>${data.message}</b><br><br>
+            🌱 <b>Suitable crops in ${data.district}:</b><br>
+            ${data.local_crops.join(", ")}
+        `;
+    } catch (err) {
+        console.error(err);
+        resultBox.innerHTML = "❌ Backend not reachable.";
     }
 };
