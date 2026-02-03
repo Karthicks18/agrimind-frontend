@@ -2,67 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>🌱 Crop Recommendation</title>
+    <title>💬 Agriculture Chatbot</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
         body {
-            background: #0b1220;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
+            background:#0b1220;
+            color:white;
+            font-family:Arial;
         }
         .container {
-            width: 70%;
-            margin: auto;
-            margin-top: 40px;
-        }
-        h1 {
-            text-align: center;
-            color: #4fc3f7;
+            width:70%;
+            margin:auto;
+            margin-top:40px;
         }
         input {
-            width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: none;
-            font-size: 16px;
+            width:100%;
+            padding:14px;
+            font-size:16px;
+            border-radius:6px;
+            border:none;
         }
         button {
-            width: 100%;
-            padding: 14px;
-            background: #29b6f6;
-            color: #000;
-            font-size: 18px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            margin-top:12px;
+            width:100%;
+            padding:14px;
+            background:#29b6f6;
+            border:none;
+            font-size:18px;
+            cursor:pointer;
+            border-radius:6px;
         }
         button:hover {
-            background: #0288d1;
-            color: #fff;
+            background:#0288d1;
+            color:white;
         }
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            background: #111827;
-            border-radius: 6px;
-            font-size: 16px;
+        #chat-response {
+            margin-top:20px;
+            padding:15px;
+            background:#111827;
+            border-radius:6px;
+            min-height:60px;
         }
         nav {
-            margin-bottom: 20px;
-            text-align: center;
+            text-align:center;
+            margin-bottom:20px;
         }
         nav a {
-            color: #4fc3f7;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 18px;
+            color:#4fc3f7;
+            margin:0 15px;
+            text-decoration:none;
+            font-size:18px;
         }
-        nav a:hover {
-            text-decoration: underline;
+        .voice-buttons {
+            display:flex;
+            gap:10px;
+            margin-top:10px;
+        }
+        .voice-buttons button {
+            width:50%;
         }
     </style>
 </head>
@@ -73,32 +72,31 @@
 
     <!-- NAVIGATION -->
     <nav>
-      <a href="/agrimind-frontend/index.html">Home</a>
-      <a href="/agrimind-frontend/crop.html">Crop</a>
-      <a href="/agrimind-frontend/fertilizer.html">Fertilizer</a>
-      <a href="/agrimind-frontend/chatbot.html">Chatbot</a>
+      <a href="index.html">Home</a>
+      <a href="crop.html">Crop</a>
+      <a href="fertilizer.html">Fertilizer</a>
+      <a href="chatbot.html">Chatbot</a>
     </nav>
 
+    <h1>💬 Agriculture Chatbot</h1>
 
-    <h1>🌱 Crop Recommendation</h1>
+    <!-- INPUT -->
+    <input id="chat-input"
+           placeholder="Ask in English or Tamil (தமிழ் / English)">
 
-    <!-- INPUTS (IDs MUST MATCH crop.js) -->
-    <input type="text" id="district" placeholder="District (e.g., Coimbatore)">
-    <input type="number" id="nitrogen" placeholder="Nitrogen (N)">
-    <input type="number" id="phosphorus" placeholder="Phosphorus (P)">
-    <input type="number" id="potassium" placeholder="Potassium (K)">
-    <input type="number" step="0.1" id="ph" placeholder="Soil pH">
+    <!-- VOICE BUTTONS -->
+    <div class="voice-buttons">
+        <button onclick="startVoice('en-US')">🎤 Speak English</button>
+        <button onclick="startVoice('ta-IN')">🎤 தமிழ் பேசுங்கள்</button>
+    </div>
 
-    <!-- BUTTON -->
-    <button onclick="recommendCrop()">Recommend Crop</button>
+    <!-- ASK BUTTON -->
+    <button onclick="askChatbot()">Ask AgriMind</button>
 
-    <!-- RESULT -->
-    <div id="result"></div>
-
+    <!-- RESPONSE -->
+    <div id="chat-response"></div>
 </div>
 
-<!-- JS (MUST BE AT END) -->
-<script src="js/crop.js"></script>
-
+<script src="js/chatbot.js"></script>
 </body>
 </html>
