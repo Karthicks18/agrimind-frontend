@@ -27,23 +27,17 @@ window.recommendCrop = async function () {
         console.log("API RESPONSE:", data);
 
         if (!data.success) {
-            resultBox.innerHTML = "❌ " + (data.error || "Something went wrong");
+            resultBox.innerHTML = "❌ " + (data.error || "Unknown error");
             return;
         }
 
-        // ✅ SAFE handling
-        let localCropsText = "Not available for this district";
-        if (Array.isArray(data.local_crops) && data.local_crops.length > 0) {
-            localCropsText = data.local_crops.join(", ");
-        }
-
         resultBox.innerHTML = `
-            <b>${data.message.replaceAll("\n", "<br>")}</b><br><br>
-            🌱 <b>District-wise crops:</b> ${localCropsText}
+            <b>${data.message}</b><br><br>
+            🌾 <b>Local crops:</b> ${data.local_crops.join(", ")}
         `;
 
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         resultBox.innerHTML = "❌ Backend not reachable.";
     }
 };

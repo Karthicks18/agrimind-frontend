@@ -1,6 +1,6 @@
-console.log("✅ fertilizer.js loaded");
+const API_BASE = "https://agrimind-oxrb.onrender.com";
 
-async function recommendFertilizer() {
+window.recommendFertilizer = async function () {
     const temperature = document.getElementById("temperature").value;
     const humidity = document.getElementById("humidity").value;
     const moisture = document.getElementById("moisture").value;
@@ -12,7 +12,7 @@ async function recommendFertilizer() {
 
     const resultBox = document.getElementById("fertilizer-result");
 
-    const url = `https://agrimind-oxrb.onrender.com/recommend_fertilizer?temperature=${temperature}&humidity=${humidity}&moisture=${moisture}&soil_type=${soil_type}&crop_type=${crop_type}&nitrogen=${nitrogen}&potassium=${potassium}&phosphorus=${phosphorus}`;
+    const url = `${API_BASE}/recommend_fertilizer?temperature=${temperature}&humidity=${humidity}&moisture=${moisture}&soil_type=${soil_type}&crop_type=${crop_type}&nitrogen=${nitrogen}&potassium=${potassium}&phosphorus=${phosphorus}`;
 
     try {
         const res = await fetch(url);
@@ -25,6 +25,6 @@ async function recommendFertilizer() {
 
         resultBox.innerHTML = `✅ Recommended Fertilizer: <b>${data.fertilizer}</b>`;
     } catch (e) {
-        resultBox.innerHTML = "❌ Backend not reachable.";
+        resultBox.innerHTML = "❌ Server not reachable.";
     }
-}
+};
