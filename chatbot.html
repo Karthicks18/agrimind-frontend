@@ -32,12 +32,15 @@
             border:none;
             font-size:18px;
             cursor:pointer;
+            color: white;
+            font-weight: bold;
         }
         #chat-response {
             margin-top:20px;
             padding:15px;
             background:#111827;
             border-radius:6px;
+            line-height: 1.5;
         }
         nav {
             text-align:center;
@@ -48,6 +51,32 @@
             margin:0 15px;
             text-decoration:none;
             font-size:18px;
+        }
+        
+        /* New Voice UI Styles */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        #mic-btn {
+            margin-top: 0;
+            width: 60px;
+            background: #4caf50;
+            border-radius: 6px;
+            font-size: 20px;
+            transition: background 0.2s;
+        }
+        #mic-btn:hover {
+            background: #45a049;
+        }
+        #lang-select {
+            padding: 8px;
+            border-radius: 6px;
+            background: #111827;
+            color: white;
+            border: 1px solid #29b6f6;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -65,9 +94,18 @@
 
 
     <h1>💬 Agriculture Chatbot</h1>
+    
+    <select id="lang-select">
+        <option value="en-IN">English</option>
+        <option value="ta-IN">தமிழ்</option>
+    </select>
 
-    <!-- THIS ID WAS MISSING -->
-    <input id="chat-input" placeholder="Ask about crops, soil, pests, seasons...">
+    <div class="input-group">
+        <input id="chat-input" placeholder="Ask about crops, soil, pests, seasons...">
+        <button id="mic-btn" title="Tap to speak">🎤</button>
+    </div>
+    
+    <div id="status" style="margin-top: 10px; font-size: 14px; color: #4fc3f7;">Tap microphone to speak or type below</div>
 
     <button onclick="askChatbot()">Ask AgriMind</button>
 
